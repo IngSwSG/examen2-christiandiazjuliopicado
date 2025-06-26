@@ -10,7 +10,7 @@ class MaterialController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function listarMateriales()
     {
         $materiales = Material::with('categoria')->get();
         return response()->json($materiales);
@@ -19,7 +19,7 @@ class MaterialController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function crearMaterial(Request $request)
     {
         $validated = $request->validate([
             'codigo' => 'required|integer|unique:materials,codigo',
@@ -43,9 +43,18 @@ class MaterialController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function actualizarMaterial(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'codigo' => 'integer|unique:materials,codigo,' . $id . ',codigo',
+            'unidadMedida' => 'string',
+            'descripcion' => 'string',
+            'ubicacion' => 'string',
+            'idCategoria' => 'exists:categorias,id',
+        ]);
+        $material = Material::where('codigo', $id)->firstOrFail();
+        $material->update($validated);
+        return response()->json($material);
     }
 
     /**
