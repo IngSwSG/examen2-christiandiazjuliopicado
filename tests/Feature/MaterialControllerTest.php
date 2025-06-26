@@ -17,7 +17,7 @@ it('dadoUnMaterialQueNoExiste_insertarMaterial_funcionaCorrectamente', function 
     ];
 
 
-    $response = $this->post('/materiales', $data);
+    $response = $this->post('/api/addMateriales', $data);
 
 
     $response->assertStatus(201);
